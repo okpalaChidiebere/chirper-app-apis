@@ -1,0 +1,62 @@
+syntax = "proto3";
+
+package tweet.v1;
+
+option go_package = "github.com/okpalaChidiebere/chirper-app-gen-protos/go/tweet/v1;chirper_app_apis_tweet_v1";
+
+import "tweet/v1/tweet.proto";
+import "google/api/annotations.proto";
+import "google/protobuf/empty.proto";
+
+
+// The Tweet service definition.
+service TweetService {
+  rpc ListTweets (ListTweetsRequest) returns (ListTweetsResponse){
+    option (google.api.http) = {
+      get: "/api/v0/tweets/limit/{limit}/next_key/{next_key}"
+    };
+  };
+  rpc SaveTweet (SaveTweetRequest) returns (SaveTweetResponse){
+    option (google.api.http) = {
+      post: "/api/v0/tweets"
+      body: "*" //we want to accept json input
+    };
+  };
+  rpc SaveLikeToggle (SaveLikeToggleRequest) returns (google.protobuf.Empty){
+    option (google.api.http) = {
+      patch: "/api/v0/tweets"
+      body: "*"
+    };
+  };
+}
+
+message ListTweetsRequest {
+  int32 limit = 1;
+  string next_key = 2;
+}
+
+message ListTweetsResponse {
+  repeated Tweet items = 1;
+  string next_key = 2;
+}
+
+message SaveTweetRequest {
+  optional string id = 1;
+  string author = 2;
+  repeated string likes = 3;
+  repeated string replies = 4;
+  string text = 5;
+  optional int64 timestamp = 6;
+  optional string replying_to = 7;
+}
+
+message SaveTweetResponse {
+  Tweet tweet  = 1;
+}
+
+message SaveLikeToggleRequest {
+  string id = 1;
+  string author = 2;
+  string authed_user_id = 3;
+  bool has_liked = 4;
+}

@@ -1,0 +1,18 @@
+version: v1
+breaking:
+  use:
+    - FILE
+# Documentation: https://docs.buf.build/lint/rules
+lint:
+  use:
+    - DEFAULT
+  ignore:
+    # because we copied these files directly from googleapis we don't want to touch them. I trust google to lint their stuff well :)
+    # curl https://raw.githubusercontent.com/googleapis/googleapis/master/google/api/annotations.proto > google/api/annotations.proto
+    # curl https://raw.githubusercontent.com/googleapis/googleapis/master/google/api/http.proto > google/api/http.proto
+    - google/api
+  except:
+    - RPC_REQUEST_STANDARD_NAME
+    - RPC_RESPONSE_STANDARD_NAME
+    - RPC_REQUEST_RESPONSE_UNIQUE
+    - SERVICE_SUFFIX

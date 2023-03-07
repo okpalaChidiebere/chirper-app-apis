@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+// naming convention is the folder(s) that include the file
+package tweet.v1;
+
+option go_package = "github.com/okpalaChidiebere/chirper-app-gen-protos/go/tweet/v1;chirper_app_apis_tweet_v1";
+
+
+// The Tweet Data
+message Tweet {
+  string id = 1;
+  string author = 2;
+  repeated string likes = 3;
+  repeated string replies = 4;
+  string text = 5;
+  int64 timestamp = 6;
+  string replying_to = 7;
+}
+
