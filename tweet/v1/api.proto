@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package tweet.v1;
 
-option go_package = "github.com/okpalaChidiebere/chirper-app-gen-protos/go/tweet/v1;chirper_app_apis_tweet_v1";
+option go_package = "github.com/okpalaChidiebere/chirper-app-gen-protos/tweet/v1;chirper_app_apis_tweet_v1";
 
 import "tweet/v1/tweet.proto";
 import "google/api/annotations.proto";

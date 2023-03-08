@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package user.v1;
+
+option go_package = "github.com/okpalaChidiebere/chirper-app-gen-protos/user/v1;chirper_app_apis_user_v1";
+
+message User {
+  string id = 1;
+  string name = 2;
+  string avatar_url = 3;
+  repeated string tweets = 4;
+}

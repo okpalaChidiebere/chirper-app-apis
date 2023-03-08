@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package image_filter.v1;
+
+option go_package = "github.com/okpalaChidiebere/chirper-app-gen-protos/image_filter/v1;chirper_app_apis_image_filter_v1";
+
+import "google/protobuf/timestamp.proto";
+
+message Image {
+  string url = 1;
+  google.protobuf.Timestamp created_at = 2;
+  google.protobuf.Timestamp updated_at = 3;
+}

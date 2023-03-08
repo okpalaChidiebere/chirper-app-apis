@@ -1,0 +1,16 @@
+version: v1
+managed:
+  enabled: true
+  go_package_prefix:
+    default: github.com/okpalaChidiebere/chirper-app-gen-protos
+plugins:
+  # documentation: https://buf.build/bufbuild/connect-go
+  - plugin: buf.build/bufbuild/connect-go
+    out: gen/go
+    opt:
+      - paths=source_relative
+  # dependencies
+  - plugin: buf.build/protocolbuffers/go
+    out: gen/go
+    opt:
+      - paths=source_relative

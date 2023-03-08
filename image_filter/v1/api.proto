@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package image_filter.v1;
+
+option go_package = "github.com/okpalaChidiebere/chirper-app-gen-protos/image_filter/v1;chirper_app_apis_image_filter_v1";
+
+service ImagefilterService {
+    rpc FilterImage (FilterImageRequest) returns (FilterImageResponse){};
+}
+
+message FilterImageRequest {
+  string image_url = 1;
+};
+
+message FilterImageResponse {
+  string filtered_url  = 1;
+};

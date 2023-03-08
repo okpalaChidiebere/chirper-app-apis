@@ -44,12 +44,18 @@ before_script:
   - if [ -z "$TRAVIS_PULL_REQUEST_SHA" ]; then SHORT_SHA=${TRAVIS_COMMIT:0 -7}; else SHORT_SHA=${TRAVIS_PULL_REQUEST_SHA:0 -7}; fi
 
 script:
-  - docker run --volume "$(pwd):/workspace" --workdir /workspace bufbuild/buf:1.11.0 generate
+  # generate protos for apis we want to server on HTTP/1.1 as well
+  - docker run --volume "$(pwd):/workspace" --workdir /workspace bufbuild/buf:1.11.0 generate \
+    --path tweet
+  # generate protos for apis we want to server on HTTP/2 as well
+  - docker run --volume "$(pwd):/workspace" --workdir /workspace bufbuild/buf:1.11.0 generate --template=buf.connect_go.gen.yaml \
+    --path user \
+    --path=image_filter
   - ./go_packages.sh
   - git clone --progress --verbose "https://${GH_REPO}"
   - git remote update origin
 
-# Tasks to perform after the process is successful. Formatting the Docker username and password as below enables you to programmatically log in without having the password exposed in logs.
+# Tasks to perform after the process is successful.
 after_success:
   - cd ${GEN_REPO_GO}
   - git checkout -b $BRANCH_NAME
