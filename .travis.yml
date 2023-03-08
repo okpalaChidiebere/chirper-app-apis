@@ -46,10 +46,10 @@ before_script:
 script:
   # generate protos for apis we want to server on HTTP/1.1 as well
   - docker run --volume "$(pwd):/workspace" --workdir /workspace bufbuild/buf:1.11.0 generate \
-    --path tweet
+    --path=tweet
   # generate protos for apis we want to server on HTTP/2 as well
   - docker run --volume "$(pwd):/workspace" --workdir /workspace bufbuild/buf:1.11.0 generate --template=buf.connect_go.gen.yaml \
-    --path user \
+    --path=user \
     --path=image_filter
   - ./go_packages.sh
   - git clone --progress --verbose "https://${GH_REPO}"
