@@ -34,7 +34,7 @@ before_install:
   - docker images
 
 # Skip any install step. Don't `go get` dependencies
-install: true
+install: echo "Skip global installing..."
 
 # Scripts to be run such as tests
 before_script:
