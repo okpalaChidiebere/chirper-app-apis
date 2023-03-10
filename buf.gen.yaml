@@ -6,16 +6,16 @@ managed:
     default: github.com/okpalaChidiebere/chirper-app-gen-protos
 # we ue the buf remote plugins directly: https://docs.buf.build/bsr/remote-packages/overview#remote-plugins
 plugins:
-  - plugin: buf.build/grpc-ecosystem/gateway
+  - plugin: buf.build/grpc-ecosystem/gateway:v2.15.2
     out: gen/go
     opt:
       - paths=source_relative
   # dependencies
-  - plugin: buf.build/protocolbuffers/go
+  - plugin: buf.build/protocolbuffers/go:v1.28.1
     out: gen/go
     opt:
       - paths=source_relative
-  - plugin: buf.build/grpc/go
+  - plugin: buf.build/grpc/go:v1.2.0
     out: gen/go
     opt:
       - paths=source_relative
