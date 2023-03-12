@@ -5,7 +5,7 @@ managed:
     default: github.com/okpalaChidiebere/chirper-app-gen-protos
 plugins:
   # documentation: https://buf.build/bufbuild/connect-go
-  - plugin: buf.build/bufbuild/connect-go:v1.5.1
+  - plugin: buf.build/bufbuild/connect-go:v1.5.2
     out: gen/go
     opt:
       - paths=source_relative
