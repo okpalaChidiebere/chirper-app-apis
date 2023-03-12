@@ -7,7 +7,7 @@ option go_package = "github.com/okpalaChidiebere/chirper-app-gen-protos/image_fi
 service ImagefilterService {
     //filter an image from a public url
     rpc FilterImage (FilterImageRequest) returns (FilterImageResponse){};
-    rpc GetGetSignedUrl (GetGetSignedUrlRequest) return (GetGetSignedUrlResponse);
+    rpc GetGetSignedUrl (GetGetSignedUrlRequest) returns (GetGetSignedUrlResponse);
 }
 
 message FilterImageRequest {
