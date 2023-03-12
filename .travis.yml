@@ -30,7 +30,7 @@ before_install:
   # dynamically install the required go version we want: https://docs.travis-ci.com/user/reference/trusty/#go-images
   - eval $(gimme 1.20.2)
   - if [ -d gen ]; then rm -rf gen; fi
-  - docker pull bufbuild/buf:1.15.1
+  - docker pull bufbuild/buf:1.13.1
   - docker images
 
 # Skip any install step. Don't `go get` dependencies
@@ -38,17 +38,17 @@ install: echo "Skip global installing..."
 
 # Scripts to be run such as tests
 before_script:
-  - docker run --volume "$(pwd):/workspace" --workdir /workspace bufbuild/buf:1.15.1 lint
-  - docker run --volume "$(pwd):/workspace" --workdir /workspace bufbuild/buf:1.15.1 breaking --against "https://github.com/${TRAVIS_REPO_SLUG}.git"
+  - docker run --volume "$(pwd):/workspace" --workdir /workspace bufbuild/buf:1.13.1 lint
+  - docker run --volume "$(pwd):/workspace" --workdir /workspace bufbuild/buf:1.13.1 breaking --against "https://github.com/${TRAVIS_REPO_SLUG}.git"
   - if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then export BRANCH_NAME=$TRAVIS_BRANCH; else BRANCH_NAME=$TRAVIS_PULL_REQUEST_BRANCH; fi
   - if [ -z "$TRAVIS_PULL_REQUEST_SHA" ]; then SHORT_SHA=${TRAVIS_COMMIT:0 -7}; else SHORT_SHA=${TRAVIS_PULL_REQUEST_SHA:0 -7}; fi
 
 script:
   # generate protos for apis we want to server on HTTP/1.1 as well
-  - docker run --volume "$(pwd):/workspace" --workdir /workspace bufbuild/buf:1.15.1 generate
+  - docker run --volume "$(pwd):/workspace" --workdir /workspace bufbuild/buf:1.13.1 generate
     --path=tweet
   # generate protos for apis we want to server on HTTP/2 as well
-  - docker run --volume "$(pwd):/workspace" --workdir /workspace bufbuild/buf:1.15.1 generate --template=buf.connect_go.gen.yaml
+  - docker run --volume "$(pwd):/workspace" --workdir /workspace bufbuild/buf:1.13.1 generate --template=buf.connect_go.gen.yaml
     --path=user
     --path=image_filter
   - ./go_packages.sh
