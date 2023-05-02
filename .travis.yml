@@ -21,16 +21,17 @@ env:
     - GH_REPO="github.com/${USER}/${GEN_REPO_GO}.git"
     - GO111MODULE=auto
     - GOPRIVATE="github.com/${USER}"
+    - BUF_VERSION=1.12.0
 
 before_install:
   # we will be dealing with private repos so we have to set github auth: https://docs.travis-ci.com/user/private-dependencies/#api-token
-  - echo -e "\n\nmachine github.com\n login $CI_USER_TOKEN\n" > ~/.netrc
+  - echo -e "\n\nmachine github.com\n login $CI_USER_TOKEN\n" > $HOME/.netrc
   # make sure the bash script is executable
   - chmod +x go_packages.sh
   # dynamically install the required go version we want: https://docs.travis-ci.com/user/reference/trusty/#go-images
   - eval $(gimme 1.20.2)
   - if [ -d gen ]; then rm -rf gen; fi
-  - docker pull bufbuild/buf:1.12.0
+  - docker pull bufbuild/buf:$BUF_VERSION # an alternative could be to download the executable in a bin folder using curl like https://buf.build/docs/ci-cd/setup/
   - docker images
 
 # Skip any install step. Don't `go get` dependencies
@@ -38,24 +39,24 @@ install: echo "Skip global installing..."
 
 # Scripts to be run such as tests
 before_script:
-  - docker run --volume "$(pwd):/workspace" --workdir /workspace bufbuild/buf:1.12.0 lint
-  - docker run --volume "$(pwd):/workspace" --workdir /workspace bufbuild/buf:1.12.0 breaking --against "https://github.com/${TRAVIS_REPO_SLUG}.git"
-  - if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then export BRANCH_NAME=$TRAVIS_BRANCH; else BRANCH_NAME=$TRAVIS_PULL_REQUEST_BRANCH; fi
-  - if [ -z "$TRAVIS_PULL_REQUEST_SHA" ]; then SHORT_SHA=${TRAVIS_COMMIT:0 -7}; else SHORT_SHA=${TRAVIS_PULL_REQUEST_SHA:0 -7}; fi
+  - docker run --volume "$(pwd):/workspace" --workdir /workspace bufbuild/buf:$BUF_VERSION lint
+  - docker run --volume "$(pwd):/workspace" --workdir /workspace bufbuild/buf:$BUF_VERSION breaking --against "https://github.com/${TRAVIS_REPO_SLUG}.git"
+  - if [ $TRAVIS_PULL_REQUEST = "false" ]; then BRANCH_NAME=$TRAVIS_BRANCH; else BRANCH_NAME=$TRAVIS_PULL_REQUEST_BRANCH; fi
+  - if [ -z $TRAVIS_PULL_REQUEST_SHA ]; then SHORT_SHA=${TRAVIS_COMMIT:0 -7}; else SHORT_SHA=${TRAVIS_PULL_REQUEST_SHA:0 -7}; fi
 
 script:
   # generate protos for apis we want to server on HTTP/1.1 as well
-  - docker run --volume "$(pwd):/workspace" --workdir /workspace bufbuild/buf:1.12.0 generate
+  - docker run --volume "$(pwd):/workspace" --workdir /workspace bufbuild/buf:$BUF_VERSION generate
     --path=tweet
   # generate protos for apis we want to server on HTTP/2 as well
-  - docker run --volume "$(pwd):/workspace" --workdir /workspace bufbuild/buf:1.12.0 generate --template=buf.connect_go.gen.yaml
+  - docker run --volume "$(pwd):/workspace" --workdir /workspace bufbuild/buf:$BUF_VERSION generate --template=buf.connect_go.gen.yaml
     --path=user
     --path=image_filter
   - ./go_packages.sh
   - git clone --progress --verbose "https://${GH_REPO}"
   - git remote update origin
 
-# Tasks to perform after the process is successful.
+# Tasks to perform ONLY after the process is successful. If you want to execute a block of code regardless of the result, use `after_script` and a custom script.
 after_success:
   - cd ${GEN_REPO_GO}
   - git checkout -b $BRANCH_NAME
